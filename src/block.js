@@ -1,4 +1,4 @@
-/**
+/***
  *                          Block class
  *  The Block class is a main component into any Blockchain platform,
  *  it will store the data and act as a dataset for your application.
@@ -8,8 +8,7 @@
  *  All the exposed methods should return a Promise to allow all the methods
  *  run asynchronous.
  */
-
-const SHA256 = require("crypto-js/sha256");
+const SHA256 = require("crypto-js");
 const hex2ascii = require("hex2ascii");
 
 class Block {
@@ -36,6 +35,14 @@ class Block {
    */
   validate() {
     let self = this;
+    let currHash;
+    let newHash;
+    return new Promise((resolve, reject) => {
+      currHash = self.hash;
+      newHash = SHA256.SHA256(JSON.stringify(self)).toString();
+      if (currHash === newHash) resolve(true);
+      reject(false);
+    });
   }
 
   /**
@@ -48,8 +55,18 @@ class Block {
    *     or Reject with an error.
    */
   getBData() {
+    let self = this;
     // Getting the encoded data saved in the Block
+    let currData = self.body;
     // Decoding the data to retrieve the JSON representation of the object
+
+    console.log(currData);
+    console.log(hex2ascii(currData));
+    return new Promise((resolve, reject) => {
+      console.log(JSON.parse(hex2ascii(currData)));
+      if (self.validate() === true) resolve(JSON.parse(hex2ascii(currData)));
+      reject("false");
+    });
     // Parse the data to an object to be retrieve.
     // Resolve with the data if the object isn't the Genesis block
   }
