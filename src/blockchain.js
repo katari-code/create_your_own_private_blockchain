@@ -34,7 +34,7 @@ class Blockchain {
    */
   async gitinitializeChain() {
     if (this.height === -1) {
-      updateChainbyOne();
+      this.height++;
       let block = new BlockClass.Block({ data: "Genesis Block" });
       await this._addBlock(block);
     }
@@ -47,9 +47,6 @@ class Blockchain {
     return new Promise((resolve, reject) => {
       resolve(this.height);
     });
-  }
-  updateChainbyOne() {
-    this.height++;
   }
 
   /**
@@ -73,8 +70,8 @@ class Blockchain {
       if (self.chain.length > 0) {
         block.previousBlockHash = self.chain[self.chain.length - 1].hash;
       }
+      this.height++;
       block.time = new Date().getTime().toString().slice(0, -3);
-      updateChainbyOne();
       block.height = await this.getChainHeight();
       block.hash = SHA256(JSON.stringify(block)).toString();
       self.chain.push(block);
@@ -206,7 +203,7 @@ class Blockchain {
    */
 
   /**
-   *
+   *   #wangzuowen/nd1309-create-your-own-private blockchain
    *   @https://github.com/wangzuowen/nd1309-create-your-own-private-blockchain.git
    */
 
