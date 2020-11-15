@@ -34,7 +34,7 @@ class Blockchain {
    */
   async gitinitializeChain() {
     if (this.height === -1) {
-      this.height++;
+      this.height = 0;
       let block = new BlockClass.Block({ data: "Genesis Block" });
       await this._addBlock(block);
     }
@@ -70,7 +70,6 @@ class Blockchain {
       if (self.chain.length > 0) {
         block.previousBlockHash = self.chain[self.chain.length - 1].hash;
       }
-      this.height++;
       block.time = new Date().getTime().toString().slice(0, -3);
       block.height = await this.getChainHeight();
       block.hash = SHA256(JSON.stringify(block)).toString();
@@ -128,6 +127,7 @@ class Blockchain {
 
       if (totalTime <= 5 && isValid) {
         const block = new BlockClass.Block({ owner: address, star: star });
+        this.height++;
         const addedBlock = await self._addBlock(block);
         resolve(addedBlock);
       }
