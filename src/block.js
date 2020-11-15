@@ -59,11 +59,7 @@ class Block {
     // Getting the encoded data saved in the Block
     let currData = self.body;
     // Decoding the data to retrieve the JSON representation of the object
-
-    console.log(currData);
-    console.log(hex2ascii(currData));
     return new Promise((resolve, reject) => {
-      console.log(JSON.parse(hex2ascii(currData)));
       if (self.validate() === true) resolve(JSON.parse(hex2ascii(currData)));
       reject("false");
     });
