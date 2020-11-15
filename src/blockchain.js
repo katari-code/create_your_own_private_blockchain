@@ -204,38 +204,37 @@ class Blockchain {
    * 1. You should validate each block using `validateBlock`
    * 2. Each Block should check the with the previousBlockHash
    */
+
+  /**
+   *
+   *   @https://github.com/wangzuowen/nd1309-create-your-own-private-blockchain.git
+   */
+
   validateChain() {
     let self = this;
     let errorLog = [];
     return new Promise(async (resolve, reject) => {
-      promises.push(block.validate());
-      if (block.height > 0) {
-        let previousBlockHash = block.previousBlockHash;
-        let blockHash = chain[chainIndex - 1].hash;
-        if (blockHash != previousBlockHash) {
-          errorLog.push(
-            `Error - Block Heigh: ${block.height} - Previous Hash don't match.`
-          );
+      for (let i = 0; i < this.chain.length; i++) {
+        const CurrentBlock = this.chain[i];
+        if (!(await CurrentBlock.validate())) {
+          errorLog.push({
+            error: "Failed validation",
+            block: CurrentBlock,
+          });
+        }
+
+        if (i === 0) continue;
+
+        const previousBlock = this.chain[i - 1];
+        if (CurrentBlock.previousBlockHash !== previousBlock.hash) {
+          errorLog.push({
+            error: "Previous block hash doesn't match",
+            block: CurrentBlock,
+          });
         }
       }
-      chainIndex++;
-      Promise.all(promises)
-        .then((results) => {
-          chainIndex = 0;
-          results.forEach((valid) => {
-            if (!valid) {
-              errorLog.push(
-                `Error - Block Heigh: ${self.chain[chainIndex].height} - Has been Tampered.`
-              );
-            }
-            chainIndex++;
-          });
-          resolve(errorLog);
-        })
-        .catch((err) => {
-          console.log(err);
-          reject(err);
-        });
+
+      resolve(errorLog);
     });
   }
 }
