@@ -211,27 +211,30 @@ class Blockchain {
     let self = this;
     let errorLog = [];
     return new Promise(async (resolve, reject) => {
-      for (let i = 0; i < this.chain.length; i++) {
-        const CurrentBlock = this.chain[i];
-        if (!(await CurrentBlock.validate())) {
-          errorLog.push({
-            error: "Failed validation",
-            block: CurrentBlock,
-          });
-        }
+      try {
+        for (let i = 0; i < this.chain.length; i++) {
+          const CurrentBlock = this.chain[i];
+          if (!(await CurrentBlock.validate())) {
+            errorLog.push({
+              error: "Failed validation",
+              block: CurrentBlock,
+            });
+          }
 
-        if (i === 0) continue;
+          if (i === 0) continue;
 
-        const previousBlock = this.chain[i - 1];
-        if (CurrentBlock.previousBlockHash !== previousBlock.hash) {
-          errorLog.push({
-            error: "Previous block hash doesn't match",
-            block: CurrentBlock,
-          });
+          const previousBlock = this.chain[i - 1];
+          if (CurrentBlock.previousBlockHash !== previousBlock.hash) {
+            errorLog.push({
+              error: "Previous block hash doesn't match",
+              block: CurrentBlock,
+            });
+          }
         }
+        resolve(errorLog);
+      } catch (e) {
+        reject(e);
       }
-
-      resolve(errorLog);
     });
   }
 }
