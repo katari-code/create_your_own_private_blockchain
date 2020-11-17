@@ -65,7 +65,6 @@ class Blockchain {
     return new Promise(async (resolve, reject) => {
       if (block === "undefined" || block === null)
         reject("Somthing happend from_addingBlock(_) function");
-
       if (self.chain.length > 0) {
         block.previousBlockHash = self.chain[self.chain.length - 1].hash;
       }
@@ -121,9 +120,6 @@ class Blockchain {
 
       const isValid = bitcoinMessage.verify(message, address, signature);
 
-      console.log(messageTime);
-      console.log(currentTime);
-
       if (totalTime <= 5 && isValid) {
         const block = new BlockClass.Block({ owner: address, star: star });
         this.height++;
@@ -163,7 +159,6 @@ class Blockchain {
     let self = this;
     return new Promise((resolve, reject) => {
       let block = self.chain.filter((p) => p.height === height)[0];
-      console.log(self.chain);
       if (block) {
         resolve(block);
       } else {
@@ -219,9 +214,7 @@ class Blockchain {
               block: CurrentBlock,
             });
           }
-
           if (i === 0) continue;
-
           const previousBlock = this.chain[i - 1];
           if (CurrentBlock.previousBlockHash !== previousBlock.hash) {
             errorLog.push({
