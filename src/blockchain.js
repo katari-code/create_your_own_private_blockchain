@@ -34,7 +34,6 @@ class Blockchain {
    */
   async gitinitializeChain() {
     if (this.height === -1) {
-      this.height = 0;
       let block = new BlockClass.Block({ data: "Genesis Block" });
       await this._addBlock(block);
     }
@@ -61,7 +60,7 @@ class Blockchain {
    * Note: the symbol `_` in the method name indicates in the javascript convention
    * that this method is a private method.
    */
-  async _addBlock(block) {
+  _addBlock(block) {
     let self = this;
     return new Promise(async (resolve, reject) => {
       if (block === "undefined" || block === null)
@@ -71,7 +70,7 @@ class Blockchain {
         block.previousBlockHash = self.chain[self.chain.length - 1].hash;
       }
       block.time = new Date().getTime().toString().slice(0, -3);
-      block.height = await this.getChainHeight();
+      block.height = ++this.height;
       block.hash = SHA256(JSON.stringify(block)).toString();
       self.chain.push(block);
       resolve(block);

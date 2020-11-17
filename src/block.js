@@ -42,7 +42,7 @@ class Block {
       self.hash = currentHash;
       resolve(true);
     } else {
-      reject(false);
+      resolve(false);
     }
   }
 
