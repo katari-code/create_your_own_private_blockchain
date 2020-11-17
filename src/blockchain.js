@@ -68,6 +68,7 @@ class Blockchain {
       if (self.chain.length > 0) {
         block.previousBlockHash = self.chain[self.chain.length - 1].hash;
       }
+
       block.time = new Date().getTime().toString().slice(0, -3);
       block.height = ++this.height;
       block.hash = SHA256(JSON.stringify(block)).toString();
@@ -122,7 +123,6 @@ class Blockchain {
 
       if (totalTime <= 5 && isValid) {
         const block = new BlockClass.Block({ owner: address, star: star });
-        this.height++;
         const addedBlock = await self._addBlock(block);
         resolve(addedBlock);
       }
